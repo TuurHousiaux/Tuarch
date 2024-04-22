@@ -25,7 +25,7 @@ set_keyboard_layout() {
         dialog_cmd+=("$keymap" "")
     done
     local choice
-    choice=$("${dialog_cmd[@]}" 2>&1 >/dev/tty)
+    choice=$( "${dialog_cmd[@]}" 2>&1 >/dev/tty )
     if [[ -n "$choice" ]]; then
         local selected_keymap="$choice"
         loadkeys "$selected_keymap"
