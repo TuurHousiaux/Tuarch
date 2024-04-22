@@ -6,9 +6,9 @@
 # Description: Script to automate the installation of Arch Linux.
 ################################################################################
 
+
 # Function to display menu
 display_menu() {
-    echo "Select your keyboard layout:"
     local keymaps=($(ls /usr/share/kbd/keymaps/**/*.map.gz | awk -F '/' '{print $NF}' | sort))
     local idx=1
     for keymap in "${keymaps[@]}"; do
@@ -19,18 +19,22 @@ display_menu() {
 
 # Function to set keyboard layout
 set_keyboard_layout() {
-    read -rp "Enter the number corresponding to your keyboard layout: " choice
     local keymaps=($(ls /usr/share/kbd/keymaps/**/*.map.gz | sort))
-    if (( choice >= 1 && choice <= ${#keymaps[@]} )); then
-        local selected_keymap="${keymaps[choice-1]}"
+    local dialog_cmd=(dialog --clear --title "Select Keyboard Layout" --menu "Use arrow keys to navigate, spacebar to select." 0 0 0)
+    for keymap in "${keymaps[@]}"; do
+        dialog_cmd+=("$keymap" "")
+    done
+    local choice
+    choice=$("${dialog_cmd[@]}" 2>&1 >/dev/tty)
+    if [[ -n "$choice" ]]; then
+        local selected_keymap="$choice"
         loadkeys "$selected_keymap"
         echo "Keyboard layout set to: $selected_keymap"
     else
-        echo "Invalid choice. Please enter a valid number."
-        set_keyboard_layout
+        echo "No layout selected. Exiting."
+        exit 1
     fi
 }
 
 # Display menu and set keyboard layout
-display_menu
 set_keyboard_layout
