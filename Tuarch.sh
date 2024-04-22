@@ -70,12 +70,20 @@ function select_option {
     return $selected
 }
 
+# FClear screen
+clear
+
 # Function to set keyboard layout
 set_keyboard_layout() {
     local keymaps=($(ls /usr/share/kbd/keymaps/i386/**/*.map.gz | sort))
     local options=()
     for keymap in "${keymaps[@]}"; do
-        options+=("$keymap")
+       filename=$(basename "$keymap") 
+       options+=("$filename")   
+        ((count++))
+        if [ $count -eq 20 ]; then
+            break
+        fi
     done
 
     select_option "${options[@]}"
