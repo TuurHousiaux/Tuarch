@@ -124,6 +124,5 @@ set_keyboard_layout() {
     
     selected_keymap="${options[$selected]}"
 
-# Set keyboard layout
-set_keyboard_layout
-
+    loadkeys "$selected_keymap"
+    echo "Keyboard layout set to: $selected_keymap"
