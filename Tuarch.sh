@@ -72,7 +72,7 @@ function select_option {
 
 # Function to set keyboard layout
 set_keyboard_layout() {
-    local keymaps=($(ls /usr/share/kbd/keymaps/**/*.map.gz | sort))
+    local keymaps=($(ls /usr/share/kbd/keymaps/i386/**/*.map.gz | sort))
     local options=()
     for keymap in "${keymaps[@]}"; do
         options+=("$keymap")
