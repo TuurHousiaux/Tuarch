@@ -34,3 +34,6 @@ set_keyboard_layout() {
 # Display menu and set keyboard layout
 display_menu
 set_keyboard_layout
+
+
+test
