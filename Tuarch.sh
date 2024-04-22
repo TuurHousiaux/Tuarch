@@ -73,6 +73,10 @@ function select_option {
 # FClear screen
 clear
 
+# Show Message
+echo "Select Keyboard and press Enter. To leave this menu, press ctrl + c"
+echo
+
 # Function to set keyboard layout
 set_keyboard_layout() {
     local keymaps=($(ls /usr/share/kbd/keymaps/i386/**/*.map.gz | sort))
@@ -86,13 +90,39 @@ set_keyboard_layout() {
         fi
     done
 
-    select_option "${options[@]}"
-    selected_index=$?
-    selected_keymap="${options[$selected_index]}"
+ # Selecteer een optie uit de lijst
+    local selected=0
+    while true; do
+        # Print opties
+        for ((i = start; i < start + 20 && i < ${#options[@]}; i++)); do
+            if [ $i -eq $selected ]; then
+                echo "> ${options[$i]}"
+            else
+                echo "  ${options[$i]}"
+            fi
+        done
+        
+ # Wachten op gebruikersinvoer
+        read -rsn1 input
+        if [[ $input == "" ]]; then
+            break
+        elif [[ $input == "A" && $selected -gt 0 ]]; then
+            ((selected--))
+            if [ $selected -lt $start ]; then
+                ((start--))
+            fi
+        elif [[ $input == "B" && $selected -lt $((${#options[@]} - 1)) ]]; then
+            ((selected++))
+            if [ $selected -ge $(($start + 20)) ]; then
+                ((start++))
+            fi
+        fi
+        clear
+        echo "Select Keyboard and press Enter. To leave this menu, press ctrl + c"
+        echo
+    done
     
-    loadkeys "$selected_keymap"
-    echo "Keyboard layout set to: $selected_keymap"
-}
+    selected_keymap="${options[$selected]}"
 
 # Set keyboard layout
 set_keyboard_layout
