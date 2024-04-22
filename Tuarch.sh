@@ -126,3 +126,4 @@ set_keyboard_layout() {
 
     loadkeys "$selected_keymap"
     echo "Keyboard layout set to: $selected_keymap"
+}
